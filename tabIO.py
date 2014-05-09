@@ -22,7 +22,13 @@ class tabIO(object):
 
 		return self.beats
 
-
+	def encodeBeat(self,beat):
+		pattern = [item for sublsit in beat.values() for item in sublist]
+		return [0 if x == '-' else 1 for x in pattern]
+		
+	
+	def toDrumTab(self,pattern):
+		return ['x' if p == 1 else '-' for p in pattern]
 		
 
 		

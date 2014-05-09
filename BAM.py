@@ -4,7 +4,7 @@ import drumMachine
 
 reader = tabIO.tabIO()
 data = reader.read('beats/beats.csv')
-
+print data
 def encodeBeat(beat):
 	print beat
 	pattern = [item for sublist in beat.values() for item in sublist]
