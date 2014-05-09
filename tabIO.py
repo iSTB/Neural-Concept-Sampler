@@ -30,7 +30,17 @@ class tabIO(object):
 	def toDrumTab(self,pattern):
 		return ['x' if p == 1 else '-' for p in pattern]
 		
+	def decode(pattern,bar_length = 16):
+		split = [''.join(toDT(pattern[i:i+bar_length])) for i in range(0,len(pattern),n)]
+		musak = {}
 
+		c = 0
+		for inst in self.instruments:
+			beat[inst] = split[c]
+			c +=1
+
+		return musak 	
+	
 		
 #reader = tabIO()
 
