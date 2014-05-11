@@ -1,9 +1,15 @@
-class tabIO(object):
 
+
+
+class tabIO(object):
+	#For reading/writing and  encoding/decoding drum beats
+	
 	def __init__(self):
 		pass
 
 	def read(self,path_to_file):
+		#takes drum beats and returns [{}]
+		
 		self.beats = []
 
 		with open(path_to_file) as f:
@@ -22,29 +28,30 @@ class tabIO(object):
 
 		return self.beats
 
-	def encodeBeat(self,beat):
-		pattern = [item for sublsit in beat.values() for item in sublist]
+	def encode(self,beat):
+		pattern = [item for sublist in beat.values() for item in sublist]
 		return [0 if x == '-' else 1 for x in pattern]
 		
 	
 	def toDrumTab(self,pattern):
 		return ['x' if p == 1 else '-' for p in pattern]
 		
-	def decode(pattern,bar_length = 16):
-		split = [''.join(toDT(pattern[i:i+bar_length])) for i in range(0,len(pattern),n)]
+	def decode(self,pattern,bar_length = 16):
+		split = [''.join(self.toDrumTab(pattern[i:i+bar_length])) for i in range(0,len(pattern),bar_length )]
 		musak = {}
 
 		c = 0
 		for inst in self.instruments:
-			beat[inst] = split[c]
+			musak[inst] = split[c]
 			c +=1
 
 		return musak 	
 	
 		
-#reader = tabIO()
+'''
+reader = tabIO()
 
-#reader.read('beats/beats.csv')
-
-#reader.read()
-
+beats = reader.read('beats/beats.csv')
+pattern = reader.encode(beats[0])
+print reader.decode(pattern)
+'''

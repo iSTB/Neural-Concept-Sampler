@@ -1,101 +1,86 @@
-import tabIO
-import drumMachine
+__author__ = "Jack Fletcher"
+__copyright__ = "Copyright 2014, Plymouth University "
+__credits__ = ["Thomas Wenneker",  "Radim Belohlavek"]
+__license__ = "GPL"
+__version__ = "1.0.1"
+__maintainer__ = "Jack Fletcher"
+__email__ = "jack.mckayfletcher@plymouth.ac.uk"
+__status__ = "Production"
 
+class CL_BAM(object):
+	def __init__(self):
+		self.context = {}
+		self.weights = []
 
-reader = tabIO.tabIO()
-data = reader.read('beats/beats.csv')
-print data
-def encodeBeat(beat):
-	print beat
-	pattern = [item for sublist in beat.values() for item in sublist]
-	return [0 if x == '-' else 1 for x in pattern]
-
-def toDT(xs):
-	return ['x' if x == 1 else '-' for x in xs]
-
-def decode(pattern):
-	n = 16
-	split = [''.join(toDT(pattern[i:i+n])) for i in range(0,len(pattern),n)]
 	
-	return {'hhc':split[0], 'snare':split[1], 'kick':split[2]}
+	def add_item(self,(obj,features)):
+		self.context[obj] = features		
+
+	
+	def make_weights(self):
+		if self.context == {}:
+			raise RuntimeError('The Context is yet to be defined')
+		objects = self.context.keys()
+		print objects
+		self.n_objects = len(objects)
+		self.n_features = len(self.context[objects[0]])
+		q = max(self.n_objects, self.n_features) + 1	
+	
+
+		for obj in objects:
+			ws =[1 if feature == 1 else -q for feature in self.context[obj]]
+			self.weights.append(ws)
+
+		print self.weights
 
 
+	def feedforward(self,feature_pattern):
+
+		obj_activitys = [0]*self.n_objects
+		for row_n in range(len(self.weights)):
+			activity = sum([weight*feature for weight,feature in zip(self.weights[row_n], feature_pattern)])
+			obj_activitys[row_n] += activity
+
+		print obj_activitys					
+		objs_firing = [1 if activity > -0.5 else 0 for activity in obj_activitys]
+		return objs_firing 
+
+	def feedback(self,object_pattern):
+		feature_activitys = [0] * self.n_features
+		for i in range(len(object_pattern)):
+			if object_pattern[i] == 1:
+				for j in range(self.n_features):
+					feature_activitys[j] += self.weights[i][j]
 		
+		print feature_activitys 
+		features_firing = [1 if activity >-0.5 else 0 for activity in feature_activitys]
+		return features_firing 
+				
 
+	def getConcept(self, input_pattern):
 
-
-#############Making wegiht Matrix######################
-barlength =  len(data[0][data[0].keys()[0]])
-n_output_nodes = len(data)
-n_input_nodes = barlength*len(data[0])
- 
-
-q = max(n_output_nodes,n_input_nodes) + 1
-
-weight_matrix = [[0]*n_input_nodes for _ in range(n_output_nodes)]
-
-
-
-########Making Context#################################
-context = []
-c = 0
-for beat in data:
-	context.append((c, encodeBeat(beat)))
-	c +=1
-#####Training weight Matrix##############
-for (groove,beats) in context:
-	for i in range(len(beats)):
-		if beats[i] == 1:
-			weight_matrix[groove][i] = 1
-
-		else:
-			weight_matrix[groove][i] = -q
-
-
-
-def getConcept(pattern):
-	patternE = encodeBeat(pattern)
-	forward = []
-	raw_f = []
-
-	back = [0]*n_input_nodes	
-	for groove in weight_matrix:
-		activity = sum([g*p for g,p in zip(groove,patternE)])				
-		
-		raw_f.append(activity)
-
-
-		if activity > -0.5:
-			forward.append(1)
-
-		else:
-			forward.append(0)	
-
-
-	print forward
-
-	for i in range(len(forward)):
-		if forward[i] == 1:
-			for j in range(len(back)):
-				back[j] += weight_matrix[i][j]
-	#print raw_f
-	print back
-
-	for i in range(len(back)):
-		if back[i] > -0.5:
-			back[i] = 1
-		else: back[i] = 0
+		if self.weights == {}:
+			raise RuntimeError('Weight Matrix not created use makeWeight()')
+		objects = self.feedforward(input_pattern) 	
+		features = self.feedback(objects)
+		return (objects,features)
 
 
 
 
-	return back
+
+o = CL_BAM()
+
+o.add_item(['a',[0,0,0,1]])
+
+o.make_weights()
 
 
-toPlay = getConcept({'hhc':"xxxxxxxxxxxxxxxx",'snare':"xxxxxxxxxxxxxxxx",'kick':"xxxxxxxxxxxxxxxx"})
-dm = drumMachine.drumMachine()
-dm.patterns = decode(toPlay)
+print o.getConcept([0,0,0,1])
 
-print dm.patterns
+'''
+os = o.feedforward([0,0,0,1])
+print o.feedback(os)
+'''
 
-dm.play()
+
