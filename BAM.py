@@ -68,7 +68,7 @@ class CL_BAM(object):
 
 
 
-
+'''
 o = CL_BAM()
 
 o.add_item(['a',[0,0,0,1]])
@@ -78,7 +78,7 @@ o.make_weights()
 
 print o.getConcept([0,0,0,1])
 
-'''
+
 os = o.feedforward([0,0,0,1])
 print o.feedback(os)
 '''

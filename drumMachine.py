@@ -62,8 +62,8 @@ class drumMachine(object):
 
 
 	def play(self,loops=-1):
-		while (True):
-
+		c = 0
+		while (c < loops or loops == -1):
 		
 			for beat in range(self.bar_length):					
 				for instrument in self.sounds.keys():
@@ -78,8 +78,9 @@ class drumMachine(object):
 										
 									
 
-				pygame.time.wait(randint(0,40))
-				self.clock.tick(self.fps)	
+				pygame.time.wait(randint(0,30))
+				self.clock.tick(self.fps)
+			c +=1
 
 	def playBeatsInFile(self,path_to_file,index_of_beat):
 		reader = tabIO.tabIO()
