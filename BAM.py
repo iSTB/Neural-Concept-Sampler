@@ -14,16 +14,23 @@ class CL_BAM(object):
 
 	
 	def add_item(self,(obj,features)):
-		self.context[obj] = features		
+		if features not in self.context.values():
+			self.context[obj] = features
+
+		else: print "Already in conxtext"		
 
 	
 	def make_weights(self):
+		self.weights = []
 		if self.context == {}:
 			raise RuntimeError('The Context is yet to be defined')
 		objects = self.context.keys()
-		print objects
+		#print objects
 		self.n_objects = len(objects)
 		self.n_features = len(self.context[objects[0]])
+		print self.n_features
+		print self.n_objects 
+ 
 		q = max(self.n_objects, self.n_features) + 1	
 	
 
@@ -31,7 +38,7 @@ class CL_BAM(object):
 			ws =[1 if feature == 1 else -q for feature in self.context[obj]]
 			self.weights.append(ws)
 
-		print self.weights
+		#print self.weights
 
 
 	def feedforward(self,feature_pattern):
@@ -41,7 +48,7 @@ class CL_BAM(object):
 			activity = sum([weight*feature for weight,feature in zip(self.weights[row_n], feature_pattern)])
 			obj_activitys[row_n] += activity
 
-		print obj_activitys					
+		#print obj_activitys					
 		objs_firing = [1 if activity > -0.5 else 0 for activity in obj_activitys]
 		return objs_firing 
 
@@ -52,9 +59,9 @@ class CL_BAM(object):
 				for j in range(self.n_features):
 					feature_activitys[j] += self.weights[i][j]
 		
-		print feature_activitys 
+		#print feature_activitys 
 		features_firing = [1 if activity >-0.5 else 0 for activity in feature_activitys]
-		return features_firing 
+		return (features_firing, feature_activitys) 
 				
 
 	def getConcept(self, input_pattern):
@@ -63,7 +70,7 @@ class CL_BAM(object):
 			raise RuntimeError('Weight Matrix not created use makeWeight()')
 		objects = self.feedforward(input_pattern) 	
 		features = self.feedback(objects)
-		return (objects,features)
+		return (objects,features[0],features[1])
 
 
 
