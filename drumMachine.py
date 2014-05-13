@@ -20,9 +20,9 @@ class drumMachine(object):
 
 
 
-		self.set_snare_sound()
-		self.set_hhc_sound()
-		self.set_kick_sound()
+		self.set_snare_sound(volume = 0.8)
+		self.set_hhc_sound(volume = 0.7)
+		self.set_kick_sound(volume = 0.6)
 
 
 	def set_snare_sound(self,path_to_snare_sound='snare.wav',volume = 1):
@@ -96,8 +96,8 @@ class drumMachine(object):
 			
 
 
-
-'''drum_machine = drumMachine()
+'''
+drum_machine = drumMachine()
 drum_machine.set_snare_sound(volume = 0.9)
 drum_machine.set_hhc_sound(volume = 0.6)
 drum_machine.set_kick_sound(volume = 0.6)
@@ -105,9 +105,9 @@ drum_machine.set_kick_sound(volume = 0.6)
 #drum_machine.playBeatsInFile('beats/beats.csv',5)
 
 
-drum_machine.set_snare_pattern("x----x----------")
-drum_machine.set_kick_pattern("x-xx-x-x-x-x-x-x")
-drum_machine.set_hhc_pattern("x---------------")
+drum_machine.set_snare_pattern("---x-xx---xx----")
+drum_machine.set_kick_pattern("x------x-------x")
+drum_machine.set_hhc_pattern("x-x-x-x-x-x-x-x-")
 print drum_machine.patterns
 drum_machine.play()'''
 

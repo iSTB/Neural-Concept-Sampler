@@ -28,8 +28,6 @@ class CL_BAM(object):
 		#print objects
 		self.n_objects = len(objects)
 		self.n_features = len(self.context[objects[0]])
-		print self.n_features
-		print self.n_objects 
  
 		q = max(self.n_objects, self.n_features) + 1	
 	
