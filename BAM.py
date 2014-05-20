@@ -1,8 +1,8 @@
 __author__ = "Jack Fletcher"
 __copyright__ = "Copyright 2014, Plymouth University "
-__credits__ = ["Thomas Wenneker",  "Radim Belohlavek"]
+__credits__ = ["Thomas Wennekers",  "Radim Belohlavek"]
 __license__ = "GPL"
-__version__ = "1.0.1"
+__version__ = "0.1"
 __maintainer__ = "Jack Fletcher"
 __email__ = "jack.mckayfletcher@plymouth.ac.uk"
 __status__ = "Production"
@@ -52,11 +52,15 @@ class CL_BAM(object):
 		max_ = max(obj_activitys)*1.0
 		min_ = min(obj_activitys)*1.0
 
-		obj_probs = [(act-min)/(max-min) for act in obj_activitys]
 
-		objs_firing = [1 if activity > -0.5 else 0 for activity in obj_activitys]
-		print "objects activitys:" + str(obj_activitys) 
+		obj_probs = [(act-min_)/(max_-min_) for act in obj_activitys]
+
+		objs_firing = [1 if random.uniform(0,1) <= prob else 0 for prob in obj_probs]
+		print "objects probs:" + str(obj_probs) 
 		 
+		return objs_firing
+
+
 
 	def feedback(self,object_pattern):
 		feature_activitys = [0] * self.n_features
@@ -81,19 +85,16 @@ class CL_BAM(object):
 
 
 
-'''
+
 o = CL_BAM()
 
 o.add_item(['a',[0,0,0,1]])
+o.add_item(['b',[1,0,1,0]])
 
 o.make_weights()
 
 
 print o.getConcept([0,0,0,1])
 
-
-os = o.feedforward([0,0,0,1])
-print o.feedback(os)
-'''
 
 
