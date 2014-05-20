@@ -53,7 +53,7 @@ for i in range(1000):
 	for act in activitys:
 		
 		prob = (act - min_)/(max_-min_) 
-		if prob >= 90:
+		'''	if prob >= 90:
 			prob -= abs(random.gauss(0,noise))*1.5	
 		
 		elif prob <= 0:
@@ -65,6 +65,7 @@ for i in range(1000):
 		#print prob
 		
 		probs.append(prob)
+		'''
 		if prob >= random.uniform(0.0,1.0):
 			toPlay.append(1)
 		else: toPlay.append(0)
