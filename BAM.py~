@@ -46,6 +46,7 @@ class CL_BAM(object):
 			activity = sum([weight*feature for weight,feature in zip(self.weights[row_n], feature_pattern)])
 			obj_activitys[row_n] += activity
 
+		#print obj_activitys					
 		objs_firing = [1 if activity > -0.5 else 0 for activity in obj_activitys]
 		return objs_firing 
 

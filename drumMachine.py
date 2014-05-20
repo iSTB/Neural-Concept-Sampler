@@ -1,4 +1,5 @@
 import pygame
+import networkx as nx
 import pyglet
 from random import randint, uniform
 import tabIO
@@ -21,11 +22,11 @@ class drumMachine(object):
 
 
 		self.set_snare_sound(volume = 0.8)
-		self.set_hhc_sound(volume = 0.7)
+		self.set_hhc_sound(volume = 0.55)
 		self.set_kick_sound(volume = 0.6)
 
 
-	def set_snare_sound(self,path_to_snare_sound='snare.wav',volume = 1):
+	def set_snare_sound(self,path_to_snare_sound='sounds/snare.wav',volume = 1):
 		
 		sound  = pyglet.resource.media(path_to_snare_sound, streaming=False).play()
 		sound.volume = volume 
@@ -36,7 +37,7 @@ class drumMachine(object):
 		self.snare_pattern = pattern
 		self.patterns['snare'] = pattern
 			
-	def set_hhc_sound(self, path_to_hhc_sound='hhc.wav',volume = 1):
+	def set_hhc_sound(self, path_to_hhc_sound='sounds/hhc.wav',volume = 1):
 		sound = pyglet.resource.media(path_to_hhc_sound, streaming=False).play()
 
 		sound.volume = volume
@@ -50,7 +51,7 @@ class drumMachine(object):
 		self.kick_pattern = pattern
 		self.patterns['kick'] = pattern
 	
-	def set_kick_sound(self, path_to_kick_sound= 'kick.wav',volume = 1):
+	def set_kick_sound(self, path_to_kick_sound= 'sounds/kick.wav',volume = 1):
 		sound = pyglet.resource.media(path_to_kick_sound, streaming=False).play()
 		sound.volume = volume
 		self.sounds['kick'] = [sound,volume]
@@ -59,6 +60,45 @@ class drumMachine(object):
 	def set_bpm(self,bpm):
 		self.bpm = bpm
 		self.fps = float(bpm*3.5)/60		
+
+
+
+
+
+
+	def humanize(self):
+
+		if self.patterns == {}: 
+			print "No beat to humanize"
+			return -1
+
+		
+		humanise = {}
+
+		insts = self.patterns.keys()
+
+		space = []
+
+		
+		# making beat 'space'
+		for inst in insts:
+			for i in range(bar_length):
+				if self.patterns[inst][i] == 'x':
+					space.append([inst,i])
+
+
+
+		
+
+
+
+
+
+
+
+					
+			
+
 
 
 	def play(self,loops=-1):
