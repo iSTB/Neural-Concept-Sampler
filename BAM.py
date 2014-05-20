@@ -7,6 +7,9 @@ __maintainer__ = "Jack Fletcher"
 __email__ = "jack.mckayfletcher@plymouth.ac.uk"
 __status__ = "Production"
 
+import random
+
+
 class CL_BAM(object):
 	def __init__(self):
 		self.context = {}
@@ -46,9 +49,14 @@ class CL_BAM(object):
 			activity = sum([weight*feature for weight,feature in zip(self.weights[row_n], feature_pattern)])
 			obj_activitys[row_n] += activity
 
+		max_ = max(obj_activitys)*1.0
+		min_ = min(obj_activitys)*1.0
+
+		obj_probs = [(act-min)/(max-min) for act in obj_activitys]
+
 		objs_firing = [1 if activity > -0.5 else 0 for activity in obj_activitys]
 		print "objects activitys:" + str(obj_activitys) 
-		return objs_firing 
+		 
 
 	def feedback(self,object_pattern):
 		feature_activitys = [0] * self.n_features
