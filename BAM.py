@@ -47,6 +47,7 @@ class CL_BAM(object):
 			obj_activitys[row_n] += activity
 
 		objs_firing = [1 if activity > -0.5 else 0 for activity in obj_activitys]
+		print "objects activitys:" + str(obj_activitys) 
 		return objs_firing 
 
 	def feedback(self,object_pattern):

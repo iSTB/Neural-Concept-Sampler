@@ -15,7 +15,7 @@ bam = BAM.CL_BAM()
 dm = drumMachine.drumMachine()
 
 
-org_beat = reader.encode({'hhc': '----------------', 'snare': '---x------------', 'kick': 'x---------------'})
+org_beat = reader.encode({'hhc': '----------------', 'snare': '----------------', 'kick': '----------------'})
 input_beat = org_beat[:] 
 
 
@@ -37,7 +37,7 @@ for i in range(1000):
 	bam.make_weights()
 	concept_pattern =  bam.getConcept(input_beat)	
 	activitys = concept_pattern[2]
-
+	#print concept_pattern
 	print "Concept:" + str(reader.decode(concept_pattern[1]))    
 	#print p 
 	toPlay = []
@@ -49,10 +49,13 @@ for i in range(1000):
 	min_ = min(activitys)*1.0
 
 	probs = []
-
 	for act in activitys:
-		
-		prob = (act - min_)/(max_-min_) 
+		if max_ - min_ == 0:
+			prob = 1
+
+		else:	
+			prob = (act - min_)/(max_-min_) 
+		'''
 		if prob >= 90:
 			prob -= abs(random.gauss(0,noise))*1.5	
 		
@@ -61,14 +64,15 @@ for i in range(1000):
 
 		else:
 			prob += random.gauss(0,noise)		
-
-		#print prob
-		
+		'''
 		probs.append(prob)
 		if prob >= random.uniform(0.0,1.0):
 			toPlay.append(1)
 		else: toPlay.append(0)
 
+
+
+#	print "Probabilitys: " +str(probs)
 	dm.patterns = reader.decode(toPlay)
 	print "Playing:" + str(dm.patterns)
 	dm.play(1)
@@ -76,8 +80,10 @@ for i in range(1000):
 
 
 
- 
-	#input_beat = toPlay
+
+		
+
+
 	bam.add_item([c,toPlay])  
 	c +=1
 
