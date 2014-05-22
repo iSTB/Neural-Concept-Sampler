@@ -33,6 +33,10 @@ class CL_BAM(object):
 		self.n_features = len(self.context[objects[0]])
  
 		q = max(self.n_objects, self.n_features) + 1	
+
+
+
+
 	
 
 		for obj in objects:
@@ -51,7 +55,6 @@ class CL_BAM(object):
 
 		max_ = max(obj_activitys)*1.0
 		min_ = min(obj_activitys)*1.0
-
 
 		obj_probs = [(act-min_)/(max_-min_) for act in obj_activitys]
 
@@ -89,7 +92,7 @@ class CL_BAM(object):
 o = CL_BAM()
 
 o.add_item(['a',[0,0,0,1]])
-o.add_item(['b',[1,0,1,0]])
+#o.add_item(['b',[1,0,1,0]])
 
 o.make_weights()
 
