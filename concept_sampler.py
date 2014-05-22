@@ -15,7 +15,7 @@ bam = BAM.CL_BAM()
 dm = drumMachine.drumMachine()
 
 
-org_beat = reader.encode({'hhc': '----------------', 'snare': '---x------------', 'kick': 'x---------------'})
+org_beat = reader.encode({'hhc': '----------------', 'snare': '----------------', 'kick': '----------------'})
 input_beat = org_beat[:] 
 
 
@@ -38,8 +38,8 @@ for i in range(1000):
 	concept_pattern =  bam.getConcept(input_beat)	
 	activitys = concept_pattern[2]
 
-	print "Concept:" + str(reader.decode(concept_pattern[1]))    
-	#print p 
+#	print "Concept:" + str(reader.decode(concept_pattern[1]))    
+	print activitys 
 	toPlay = []
 
 
