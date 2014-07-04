@@ -8,7 +8,7 @@ __email__ = "jack.mckayfletcher@plymouth.ac.uk"
 __status__ = "Production"
 
 import random
-
+import pylab
 
 class CL_BAM(object):
 	def __init__(self):
@@ -21,7 +21,6 @@ class CL_BAM(object):
 			self.context[obj] = features
 
 		else: print "Already in conxtext"		
-
 	
 	def make_weights(self):
 		self.weights = []
@@ -32,19 +31,13 @@ class CL_BAM(object):
 		self.n_objects = len(objects)
 		self.n_features = len(self.context[objects[0]])
  
-		q = max(self.n_objects, self.n_features) + 1	
-
-
-
-
-	
+		self.q = max(self.n_objects, self.n_features)*1.0 +1 	
 
 		for obj in objects:
-			ws =[1 if feature == 1 else -q for feature in self.context[obj]]
+			ws =[1 if feature == 1 else -self.q for feature in self.context[obj]]
 			self.weights.append(ws)
 
 		#print self.weights
-
 
 	def feedforward(self,feature_pattern):
 
@@ -53,16 +46,30 @@ class CL_BAM(object):
 			activity = sum([weight*feature for weight,feature in zip(self.weights[row_n], feature_pattern)])
 			obj_activitys[row_n] += activity
 
-		max_ = max(obj_activitys)*1.0
-		min_ = min(obj_activitys)*1.0
+		max_ = max(obj_activitys)*1.0 #+self.n_objects +1
+		min_ = min(obj_activitys)*1.0 
 
-		obj_probs = [(act-min_)/(max_-min_) for act in obj_activitys]
 
-		objs_firing = [1 if random.uniform(0,1) <= prob else 0 for prob in obj_probs]
-		print "objects probs:" + str(obj_probs) 
-		 
+
+		if max_ == min_:
+			objs_firing = [1 if x >= -0.5 else 0 for x in obj_activitys]
+			print "here!"
+
+
+
+		else:
+
+			obj_probs = [(act-min_)/(max_-min_) for act in obj_activitys]
+
+			objs_firing = [1 if random.uniform(0,1) <= prob else 0 for prob in obj_probs]
+			print "objects probs:" + str(obj_probs) 
+
+			
+		objs_firing = [1 if x >= -0.5 else 0 for x in obj_activitys]
+
+
+
 		return objs_firing
-
 
 
 	def feedback(self,object_pattern):
@@ -72,9 +79,22 @@ class CL_BAM(object):
 				for j in range(self.n_features):
 					feature_activitys[j] += self.weights[i][j]
 		
-		#print feature_activitys 
-		features_firing = [1 if activity >-0.5 else 0 for activity in feature_activitys]
-		return (features_firing, feature_activitys) 
+		max_ = max(feature_activitys)*1.0
+		min_ = min(feature_activitys)*1.0 
+
+
+		
+		concept = [1 if x >= -0.5 else 0 for x in feature_activitys]
+
+		if max_ == min_:
+			features_firing = concept
+		
+		else:
+			feature_probs = [(act-min_)/(max_ - min_) for act in feature_activitys]
+			features_firing = [1 if random.uniform(0,1) <= prob else 0 for prob in feature_probs]
+
+
+		return (features_firing, concept)
 				
 
 	def getConcept(self, input_pattern):
@@ -90,14 +110,11 @@ class CL_BAM(object):
 
 
 o = CL_BAM()
-
 o.add_item(['a',[0,0,0,1]])
-#o.add_item(['b',[1,0,1,0]])
+o.add_item(['b',[1,0,1,1]])
 
 o.make_weights()
 
-
 print o.getConcept([0,0,0,1])
-
 
 

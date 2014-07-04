@@ -34,7 +34,7 @@ class tabIO(object):
 		
 	
 	def toDrumTab(self,pattern):
-		return ['x' if p == 1 else '-' for p in pattern]
+		return ['x' if p == 1  else '-' for p in pattern]
 		
 	def decode(self,pattern,bar_length = 16):
 		split = [''.join(self.toDrumTab(pattern[i:i+bar_length])) for i in range(0,len(pattern),bar_length )]
