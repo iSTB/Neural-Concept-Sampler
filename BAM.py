@@ -11,21 +11,20 @@ class CL_BAM(object):
 	def __init__(self):
 		self.context = {}
 		self.weights = []
-
 	
+	def __str__(self):
+		return "BAM implmenting the formal concept %s" % self.context
+
 	def add_item(self,(obj,features)):
 		if features not in self.context.values():
 			self.context[obj] = features
-
-		else: print "Already in conxtext"		
-
+		else: print "(%d,%d) is already in conxtext and was not added" % (obj,features)		
 	
 	def make_weights(self):
 		self.weights = []
 		if self.context == {}:
 			raise RuntimeError('The Context is yet to be defined')
 		objects = self.context.keys()
-		#print objects
 		self.n_objects = len(objects)
 		self.n_features = len(self.context[objects[0]])
  
@@ -35,9 +34,6 @@ class CL_BAM(object):
 		for obj in objects:
 			ws =[1 if feature == 1 else -q for feature in self.context[obj]]
 			self.weights.append(ws)
-
-		#print self.weights
-
 
 	def feedforward(self,feature_pattern):
 
