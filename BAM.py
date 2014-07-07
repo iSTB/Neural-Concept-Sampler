@@ -46,7 +46,7 @@ class CL_BAM(object):
 
 	def feedback(self,object_pattern):
 		feature_activitys = [0] * self.n_features
-		for i in range(len(object_pattern)):
+		for i in xrange(len(object_pattern)):
 			if object_pattern[i] == 1:
 				for j in range(self.n_features):
 					feature_activitys[j] += self.weights[i][j]
