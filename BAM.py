@@ -18,8 +18,7 @@ class CL_BAM(object):
 	def add_item(self,(obj,features)):
 		if features not in self.context.values():
 			self.context[obj] = features
-		else: print "(%d,%d) is already in conxtext and was not added" % (obj,features)		
-	
+		else: print "%s, %s is already in conxtext and was not added" % (obj,features)
 	def make_weights(self):
 		self.weights = []
 		if self.context == {}:
